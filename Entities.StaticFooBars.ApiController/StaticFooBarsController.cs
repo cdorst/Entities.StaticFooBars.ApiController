@@ -17,10 +17,10 @@ namespace Entities.StaticFooBars.ApiController
         private readonly ILogger<StaticFooBarsController> _logger;
 
         /// <summary>Represents repository of StaticFooBar entity data</summary>
-        private readonly IRepository<StaticFooBarDbContext, StaticFooBar, > _repository;
+        private readonly IRepository<StaticFooBarDbContext, StaticFooBar, int> _repository;
 
         /// <summary>Constructs an API controller for StaticFooBar entities using the given repository service</summary>
-        public StaticFooBarsController(ILogger<StaticFooBarsController> logger, IRepository<StaticFooBarDbContext, StaticFooBar, > repository)
+        public StaticFooBarsController(ILogger<StaticFooBarsController> logger, IRepository<StaticFooBarDbContext, StaticFooBar, int> repository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -28,15 +28,17 @@ namespace Entities.StaticFooBars.ApiController
 
         /// <summary>Handles HTTP GET requests to access StaticFooBar resources at the given ID</summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<StaticFooBar>> Get(id)
-        {var resource = await _repository.FindAsync(id);
-        if (resource == null) return NotFound();
-        return resource;
+        public async Task<ActionResult<StaticFooBar>> Get(int id)
+        {
+            if (id < 1) return NotFound();
+            var resource = await _repository.FindAsync(id);
+            if (resource == null) return NotFound();
+            return resource;
         }
 
         /// <summary>Handles HTTP HEAD requests to access StaticFooBar resources at the given ID</summary>
         [HttpHead("{id}")]
-        public ActionResult<StaticFooBar> Head(id) => null;
+        public ActionResult<StaticFooBar> Head(int id) => null;
 
         /// <summary>Handles HTTP POST requests to save StaticFooBar resources</summary>
         [HttpPost]
